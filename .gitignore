@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Logs and databases
+logs/
+*.log
+
+output/
+dist/
+data/
+product_endpoints/
+
+# IDE specific files
+.idea/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Configuration files
+*.cfg
+
+# Package installer cache
+pip-log.txt
+
+# Ignore environment-specific files
+.env
+
+# Ignore sensitive or personal information
+auth_creds/
