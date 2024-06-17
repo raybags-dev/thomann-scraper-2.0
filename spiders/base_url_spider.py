@@ -1,12 +1,10 @@
 import os
 import csv
 from pathlib import Path
-import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin
 from utils.loader import emulator
-from playwright.sync_api import sync_playwright
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from playwright.async_api import async_playwright
 from middlewares.errors.error_handler import handle_exceptions
 from middlewares.logger.logger import custom_logger, initialize_logging
 
@@ -19,8 +17,10 @@ def is_valid_url(url):
     return all([parsed.scheme, parsed.netloc])
 
 
+# ===================================================
+# ===================================================
 @handle_exceptions
-def scrape_thomann_base_urls(can_run=False):
+async def scrape_thomann_base_urls(can_run=False):
     if not can_run:
         custom_logger("BaseURL collection disabled!", log_type="info")
         return False
@@ -31,16 +31,17 @@ def scrape_thomann_base_urls(can_run=False):
 
     emulator(message="Starting URL scraping process...", is_in_progress=True)
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
 
         try:
             custom_logger(f"Navigating to {base_url}", log_type="info")
-            page.goto(base_url, timeout=60000)
-            page.wait_for_selector('.thomann-page-content-wrapper', state='visible', timeout=30000)
+            await page.goto(base_url, timeout=60000)
+            await page.wait_for_selector('.thomann-page-content-wrapper', state='visible', timeout=30000)
 
-            soup = BeautifulSoup(page.content(), 'html.parser')
+            content = await page.content()
+            soup = BeautifulSoup(content, 'html.parser')
             link_items = soup.select('.link-list__item a.link-list__text')
             endpoints = set()
 
@@ -67,5 +68,8 @@ def scrape_thomann_base_urls(can_run=False):
             return False
 
         finally:
-            browser.close()
+            await browser.close()
             emulator(is_in_progress=False)
+
+# ===================================================
+# ===================================================

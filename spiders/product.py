@@ -2,9 +2,8 @@ import json, asyncio
 from pathlib import Path
 from utils.loader import emulator
 from auth_creds.headers import Headers
-import requests, time, random, csv, os, re
+import csv, re
 from utils.utilities import randomize_timeout, click_consent_button
-from urllib.parse import urljoin, urlparse, parse_qs, urlencode, urlunparse
 from playwright.async_api import async_playwright, Error as PlaywrightError
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from utils.parsers.parse_products import extract_product_data
@@ -57,6 +56,7 @@ class ProductProcessorApp:
                         products_url_constructs.add(url)
 
         return list(products_url_constructs)
+
         # ===================================================
         # ===================================================
 
