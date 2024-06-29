@@ -1,4 +1,5 @@
-import logging, traceback
+import logging
+import traceback
 from pathlib import Path
 from colorama import init, Fore, Style
 
@@ -27,7 +28,9 @@ def initialize_logging() -> None:
 
             # File handler
             file_handler = logging.FileHandler(Path(LOG_FOLDER) / filename)
-            file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+            file_handler.setFormatter(
+                logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+            )
             logger.addHandler(file_handler)
 
             # Console handler with color
